@@ -5,7 +5,8 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 
 This file creates your application.
 """
-
+import cgi
+import smtplib
 from app import app
 from flask import render_template, request, redirect, url_for
 
@@ -14,15 +15,49 @@ from flask import render_template, request, redirect, url_for
 # Routing for your application.
 ###
 
+def send_email():
+    
+    formData = cgi.FieldStorage()
+    fromaddr = 'odane.hamilton@gmail.com'
+    fromname = 'Odane'
+    toname = 'John'
+    subject = 'Test 2'
+    msg = 'Data'
+    toaddr  = 'me@odanephamilton.com'
+    message = messagetosend = message.format(
+                             fromname,
+                             fromaddr,
+                             toname,
+                             toaddr,
+                             subject,
+                             msg)
+
+    username = 'odane.hamilton@gmail.com'
+    password = 'xcncejeiwtjbbqzg'
+
+    # The actual mail send
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.starttls()
+    server.login(username,password)
+    server.sendmail(fromaddr, toaddr, messagetosend)
+    server.quit()
+
+
+
+
+
 @app.route('/')
 def home():
     """Render website's home page."""
     return render_template('home.html')
+    
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
     """Render website's contact page."""
     return render_template('contact.html')
+
+
 
 
 
@@ -61,4 +96,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0",port="8888")
+    app.run(debug=True,host="0.0.0.0",port="8080")
