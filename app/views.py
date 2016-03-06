@@ -17,17 +17,22 @@ from flask import render_template, request, redirect, url_for
 
 def send_email():
     
-    formData = cgi.FieldStorage()
     fromaddr = 'odane.hamilton@gmail.com'
-    fromname = 'Odane'
-    toname = 'John'
-    subject = 'Test 2'
-    msg = 'Data'
-    toaddr  = 'me@odanephamilton.com'
-    message = messagetosend = message.format(
-                             fromname,
-                             fromaddr,
-                             toname,
+    fromname = 'Odane P. Hamilton'
+    toname = request.form['name']
+    subject = request.form['subject']
+    msg = request.form['message']
+    toaddr  = request.form['email']
+    message = """From: {} <{}>
+To: <{}>
+Subject: {}
+
+{}
+"""
+
+    messagetosend  = message.format(
+                            fromname,
+                            fromaddr,
                              toaddr,
                              subject,
                              msg)
@@ -46,6 +51,7 @@ def send_email():
 
 
 
+
 @app.route('/')
 def home():
     """Render website's home page."""
@@ -55,7 +61,8 @@ def home():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     """Render website's contact page."""
-    return render_template('contact.html')
+    script = send_email()
+    return render_template('contact.html', script = script)
 
 
 
