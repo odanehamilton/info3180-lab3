@@ -55,7 +55,7 @@ def home():
 def contact():
     """Render website's contact page."""
     if request.method == 'POST':
-        script = send_email()
+        send_email()
     return render_template('contact.html')
 
 
