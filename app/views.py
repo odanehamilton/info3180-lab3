@@ -16,13 +16,12 @@ from flask import render_template, request, redirect, url_for
 ###
 
 def send_email():
-    
     fromaddr = 'odane.hamilton@gmail.com'
     fromname = 'Odane P. Hamilton'
-    toname = request.form['name']
     subject = request.form['subject']
     msg = request.form['message']
     toaddr  = request.form['email']
+    
     message = """From: {} <{}>
 To: <{}>
 Subject: {}
@@ -30,13 +29,8 @@ Subject: {}
 {}
 """
 
-    messagetosend  = message.format(
-                            fromname,
-                            fromaddr,
-                             toaddr,
-                             subject,
-                             msg)
 
+    messagetosend  = message.format(fromname, fromaddr, toaddr, subject, msg)
     username = 'odane.hamilton@gmail.com'
     password = 'xcncejeiwtjbbqzg'
 
@@ -51,7 +45,6 @@ Subject: {}
 
 
 
-
 @app.route('/')
 def home():
     """Render website's home page."""
@@ -61,8 +54,9 @@ def home():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     """Render website's contact page."""
-    script = send_email()
-    return render_template('contact.html', script = script)
+    if request.method == 'POST':
+        script = send_email()
+    return render_template('contact.html')
 
 
 
